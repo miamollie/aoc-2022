@@ -1,4 +1,5 @@
 # --- Day 3: Rucksack Reorganization ---
+
 One Elf has the important job of loading all of the rucksacks with supplies for the jungle journey. Unfortunately, that Elf didn't quite follow the packing instructions, and so a few items now need to be rearranged.
 
 Each rucksack has two large compartments. All items of a given type are meant to go into exactly one of the two compartments. The Elf that did the packing failed to follow this rule for exactly one item type per rucksack.
@@ -29,14 +30,12 @@ In the above example, the priority of the item type that appears in both compart
 
 Find the item type that appears in both compartments of each rucksack. What is the sum of the priorities of those item types?
 
-
 ## Requirements
-- Each item is a letter 
+
+- Each item is a letter
 - Each rucksack has two compartments, which should only contain one of any item type
 - Every backpack has the same number of items on either side
 - Every backpack has one error; an item type that appears on _both_ sides
-
-
 
 ## Psuedocode
 
@@ -53,8 +52,37 @@ while(input) {
             errorCost := index of V in letters (+1)
         }  else {
             foundItems[v] = interface{}
-        } 
+        }
     }
 }
+
+```
+
+## Requirements part two
+
+- Find one item common to all three groups
+- That is the "badge" of the group, and needs to be pulled out
+- Find the item type of all the sets of three elves, and find the total cost of all these items
+
+## Psuedocode
+
+```
+
+costCount = 0
+groupCount = 0
+itemsMap = make(map[string]int)
+while(input) {
+    groupCount ++
+    for i, v range line {
+        itemsMap[v] ++
+        if (itemsmap[v] == 3) {
+            <!-- it's been found 3 times, so update the total cost and break, then clear the items map, reset group count -->
+            costCount += strings.Index(letters, v)
+            groupCount = 0
+            itemsMap = make(map[string]int)
+        }
+    }
+}
+
 
 ```

@@ -19,28 +19,52 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	errorCost := 0
+	totalCost := 0
+	groupCount := 0
+	// itemsMap := make(map[string][]int)
 	for scanner.Scan() {
+		groupCount++
 		line := scanner.Text()
-		compartmentLength := len(line) / 2
-		var foundItems = make(map[rune]struct{})
+		updatePriorityCost(line, &totalCost)
+		// for _, v := range line {
+		// 	c := string(v)
+		// 	val, ok := itemsMap[c]
 
-		for i, v := range line {
-			fmt.Printf("Letter is currently %v \n", string(v))
-			if i < compartmentLength {
-				fmt.Println("still on left side")
-				foundItems[v] = struct{}{}
-			} else {
-				fmt.Println("still on now on right side")
-				if _, ok := foundItems[v]; ok {
-					fmt.Printf("%v has been seen before and index is %v \n", string(v), i)
-					fmt.Printf(" Priority cost for letters is %v\n", strings.Index(letters, string(v)))
-					errorCost += strings.Index(letters, string(v)) + 1
-					fmt.Printf("new total %v,  letter Cost %v, letter %v \n", errorCost, strings.Index(string(v), letters)+1, string(v))
-					break
-				}
+		// 	fmt.Printf("value for letter  %v is %v and groupCount is %v\n ", c, itemsMap[c], groupCount)
+		// 	if !ok {
+		// 		fmt.Println(val)
+		// 		arr := make([]int, 3)
+		// 		arr[groupCount-1] = 1
+		// 		itemsMap[c] = arr
+		// 	} else {
+		// 		val[groupCount-1] = 1
+		// 		itemsMap[c] = val
+		// 	}
+		// 	// found in all three groups
+		// 	if len(val) == 3 && val[0]+val[1]+val[2] == 3 {
+		// 		fmt.Printf("Found item %v 3 times and it costs %v \n", c, strings.Index(letters, c))
+		// 		totalCost += strings.Index(letters, c) + 1
+		// 		groupCount = 0
+		// 		itemsMap = make(map[string][]int)
+		// 		break
+		// 	}
+		// }
+	}
+	fmt.Printf("total cost %v\n", totalCost)
+}
+
+func updatePriorityCost(line string, errorCost *int) {
+	compartmentLength := len(line) / 2
+	var foundItems = make(map[rune]struct{})
+
+	for i, v := range line {
+		if i < compartmentLength {
+			foundItems[v] = struct{}{}
+		} else {
+			if _, ok := foundItems[v]; ok {
+				*errorCost += strings.Index(letters, string(v)) + 1
+				break
 			}
 		}
 	}
-	fmt.Println(errorCost)
 }
