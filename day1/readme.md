@@ -34,25 +34,54 @@ In case the Elves get hungry and need extra snacks, they need to know which Elf 
 
 Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
 
-## Requirements
+## Requirements 1
 - Input API: https://adventofcode.com/2022/day/1/input
 -  Input format: each elf lists a sequence of calories followed by a terminating space
 - goal: find the index of the elf carrying the highest total number of calories
 
 
-## Pseudocode
+## Pseudocode 1
 
+```
 highestCalories = 0
 while(input) {
+    current = 0
     if input! = " " {
 
-     currentCalories += input
+     current += input
     } else {
-        if (currentCalories > highestCalories ) {
-            highestCalories = currentCalories
+        if (current > highestCalories ) {
+            highestCalories = current
         }
     }
     input.advance
 }
+```
+
+## Requirements 2
+Given the same input, find the sum of the three highest calorie counts
+
+## Pseudocode 2
+```
+highest int[]{0,0,0}
+while(input) {
+    current = 0
+    if input! = " " {
+
+     current += input
+    } else {
+        const i, v range highest {
+            if current  > v {
+                highest[i] = current
+                break
+            }
+        }
+        if (current > highestCalories ) {
+            highest = current
+        }
+    }
+    input.advance
+}
+```
 
 
