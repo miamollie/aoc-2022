@@ -36,18 +36,15 @@ func main() {
 	defer movesFile.Close()
 
 	scanner = bufio.NewScanner(movesFile)
-	lineCount := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		lineCount++
-		fmt.Println(lineCount)
-		applyMove(line, stacks)
+		applyMultiBoxMove(line, stacks)
 	}
 	fmt.Printf("STACKS FINAL POSITION")
 	fmt.Printf("%#v\n", stacks)
 }
 
-func applyMove(line string, stacks []string) {
+func applySingleBoxMove(line string, stacks []string) {
 	sections := strings.Split(line, " ")
 	boxCount, _ := strconv.Atoi(sections[1])
 	fromColNum, _ := strconv.Atoi(sections[3])
@@ -64,6 +61,24 @@ func applyMove(line string, stacks []string) {
 		l := len(oldCol)
 		stacks[fromColNum] = oldCol[1:l]
 	}
+
+}
+
+func applyMultiBoxMove(line string, stacks []string) {
+	sections := strings.Split(line, " ")
+	boxCount, _ := strconv.Atoi(sections[1])
+	fromColNum, _ := strconv.Atoi(sections[3])
+	fromColNum-- //array offset
+	toColNum, _ := strconv.Atoi(sections[5])
+	toColNum-- //array offset
+
+	fmt.Printf("move  %v  boxes from %v,  to %v\n", boxCount, fromColNum+1, toColNum+1)
+
+	oldCol := stacks[fromColNum]
+	newCol := stacks[toColNum]
+	stacks[toColNum] = oldCol[0:boxCount] + newCol
+	l := len(oldCol)
+	stacks[fromColNum] = oldCol[boxCount:l]
 
 }
 

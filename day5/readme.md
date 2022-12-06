@@ -85,3 +85,13 @@ func initStacks(inputStackFile)[][]int {
 }
 
 ```
+
+## Requirements
+- pick up and move multiple crates at once, instead of just one
+
+## Psuedocode
+
+```
+
+
+```
