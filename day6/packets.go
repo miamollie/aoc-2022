@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+const offset = 14
+
 func main() {
 	stacksFilePath := os.Args[1]
 	stacksFile, err := os.Open(stacksFilePath)
@@ -20,13 +22,13 @@ func main() {
 		line := scanner.Text()
 		fmt.Printf("line %#v is %#v chars long\n", line, len(line))
 
-		for i := 0; i < len(line)-4; i = i + 1 {
+		for i := 0; i < len(line)-offset; i = i + 1 {
 			// check for a buffer of 4 unique characters
 			// move through the input string in slices of 4
-			cur := line[i : i+4]
+			cur := line[i : i+offset]
 			fmt.Printf("Checking range %#v \n", cur)
 			if ok := isUniqueRange(cur); ok {
-				fmt.Println(i + 4)
+				fmt.Println(i + offset)
 				break
 			}
 
@@ -36,8 +38,8 @@ func main() {
 }
 
 func isUniqueRange(s string) bool {
-	chars := make(map[string]struct{}, 4)
-	for j := 0; j < 4; j++ {
+	chars := make(map[string]struct{}, offset)
+	for j := 0; j < offset; j++ {
 		letter := string(s[j])
 		// fmt.Printf("Letter is %#v \n", letter)
 		if _, ok := chars[letter]; ok {
