@@ -103,3 +103,17 @@ while(input) {
 }
 
 ```
+
+
+
+## Requirements 
+
+- The total disk space available to the filesystem is 70000000. To run the update, you need unused space of at least 30000000. 
+- You need to find a directory you can delete that will free up enough space to run the update.
+- Find the smallest directory that, if deleted, would free up enough space on the filesystem to run the update. What is the total size of that directory?
+
+Figure out:
+- what is the size of the outermost directory
+- what is the difference between the outermost directory and the total filesystem : 70000000 - root node
+- if the reminaing disk space is less than 30000000, the update can't run.  What is the difference between the remaining space and the required disk space REQ_SPACE
+- 

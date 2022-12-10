@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -16,6 +17,11 @@ const (
 	rootDir  = "/"
 	upALevel = ".."
 	dirname  = "dir"
+)
+
+const (
+	TOTAL_DISK_SPACE       = 70000000
+	REQUIRED_UPGRADE_SPACE = 30000000
 )
 
 func main() {
@@ -46,9 +52,7 @@ func main() {
 				} else {
 					cur = cur.findChild(newDir)
 				}
-				fmt.Printf("Move to directory: %#v\n", newDir)
 			case ls:
-				fmt.Println("list mode")
 			}
 		} else {
 			// it wasn't a command, so add to the tree
@@ -64,10 +68,29 @@ func main() {
 		}
 	}
 
-	t := root.calcTotalCappedSize(100000)
+	// t := root.calcTotalCappedSize(100000)
 
-	fmt.Printf("Total: %#v \n", t)
-	// then traverse the tree and if node.size < cosntraintSize add it to total
+	// fmt.Printf("Total: %#v \n", t)
+
+	remainingSpace := TOTAL_DISK_SPACE - root.size
+	fmt.Printf("Root size: %v\n", root.size)
+	requiredSpace := REQUIRED_UPGRADE_SPACE - remainingSpace
+	fmt.Printf("Required space: %v\n", requiredSpace)
+
+	d := root.getAllDirSizes(requiredSpace)
+	sort.Ints(d[:]) //sort the array
+
+	var smallestToDelete int
+	for _, v := range d {
+		if v > requiredSpace {
+			smallestToDelete = v
+			break
+		}
+	}
+
+	fmt.Println(len(d))
+
+	fmt.Printf("Should delete directory: %#v \n", smallestToDelete)
 }
 
 // Node represents tree with integer size and a string name.
@@ -105,6 +128,19 @@ func (n *Node) findChild(name string) *Node {
 		return v
 	}
 	return nil
+}
+
+func (n *Node) getAllDirSizes(requiredSpace int) []int {
+	dirSizes := make([]int, 0)
+
+	for _, v := range n.children {
+		if v.children != nil { //don't include files, just directories
+			dirSizes = append(dirSizes, v.size)
+			childSizes := v.getAllDirSizes(requiredSpace)
+			dirSizes = append(dirSizes, childSizes...)
+		}
+	}
+	return dirSizes
 }
 
 func (n *Node) calcTotalCappedSize(maxDirSize int) int {
